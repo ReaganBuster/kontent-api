@@ -8,9 +8,9 @@ from app.core.database import engine, Base
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="HookUp Dating API",
+    title="Kontent API",
     version="1.0.0",
-    description="""The HookUp Dating API is the backend service for a dynamic and engaging dating and social networking platform that combines the discoverability of social media (like Twitter and Instagram) with a unique, paid connection model. Our platform is designed to facilitate genuine connections and "link-ups" by introducing a strategic monetization layer for direct, private interactions, while also empowering content creators.""",
+    description="""Kontent API is the backend service for a dynamic and engaging dating and social networking platform that combines the discoverability of social media (like Twitter and Instagram) with a unique, paid connection model. Our platform is designed to facilitate genuine connections and "link-ups" by introducing a strategic monetization layer for direct, private interactions, while also empowering content creators.""",
     openapi_url=f"{settings.API_V1_STR}/openapi.json" if settings.DEBUG else None,
 )
 

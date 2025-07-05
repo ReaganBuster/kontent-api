@@ -1,6 +1,6 @@
-# FastAPI Project
+# Kontent API
 
-A production-ready FastAPI project with SQLAlchemy, Alembic, and authentication.
+Kontent API is the backend service for a dynamic and engaging dating and social networking platform that combines the discoverability of social media (like Twitter and Instagram) with a unique, paid connection model. Our platform is designed to facilitate genuine connections and "link-ups" by introducing a strategic monetization layer for direct, private interactions, while also empowering content creators..
 
 ## Features
 
