@@ -12,9 +12,24 @@ class MomentService:
     def get_moment(self, moment_id: uuid.UUID) -> Optional[Moment]:
         return self.db.query(Moment).filter(Moment.moment_id == moment_id).first()
     
-    def create_moment(self, moment_data: MomentCreate) -> Moment:
-        new_moment = Moment(**moment_data.model_dump())
+    def create_moment(self, moment_data: MomentCreate, user_id: uuid.UUID) -> Moment:
+        # 1. Unpack only the relevant fields for the Moment model
+        new_moment = Moment(
+            user_id=user_id,
+            text_content=moment_data.text_content,
+            visibility=moment_data.visibility
+        )
+
         self.db.add(new_moment)
+        self.db.flush()  # This assigns new_moment.moment_id without committing yet
+
+        # 2. Associate media (if any)
+        if moment_data.media_ids:
+            media_items = self.db.query(Media).filter(Media.media_id.in_(moment_data.media_ids)).all()
+            for media in media_items:
+                media.moment_id = new_moment.moment_id
+                self.db.add(media)  # Optional, since already in session
+
         self.db.commit()
         self.db.refresh(new_moment)
         return new_moment
@@ -48,7 +63,7 @@ class MomentService:
         return self.db.query(Moment).filter(Moment.user_id == user_id).all()
     
     def get_public_moments(self) -> List[Moment]:
-        return self.db.query(Moment).filter(Moment.is_public == True).all()
+        return self.db.query(Moment).filter().all()
     
     def get_moments_by_ids(self, moment_ids: List[uuid.UUID]) -> List[Moment]:
         return self.db.query(Moment).filter(Moment.moment_id.in_(moment_ids)).all()

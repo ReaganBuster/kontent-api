@@ -23,7 +23,7 @@ class UserUpdate(BaseModel):
     is_active: Optional[bool] = None
 
 class UserResponse(UserBase):
-    id: uuid.UUID
+    user_id: uuid.UUID
     created_at: datetime
     updated_at: Optional[datetime] = None
     
@@ -33,9 +33,9 @@ class UserResponse(UserBase):
 class UserPublic(BaseModel):
     user_id: uuid.UUID
     username: str
-    display_name: Optional[str] = None # Pulled from profile
-    profile_picture_url: Optional[str] = None # Pulled from profile
-    is_online: Optional[bool] = None # Derived from last_active_at (e.g., within last 5 mins)
+    # display_name: Optional[str] = None # Pulled from profile
+    # profile_picture_url: Optional[str] = None # Pulled from profile
+    # is_online: Optional[bool] = None # Derived from last_active_at (e.g., within last 5 mins)
 
     model_config = ORMConfig
 

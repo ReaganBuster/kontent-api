@@ -6,7 +6,7 @@ import uuid
 from app.core.database import get_db
 from app.api.v1.endpoints.auth import get_current_user
 from app.schemas.media import MediaUpload, MediaResponse
-from app.services.media_service import MediaService as crud_media
+from app.services.media_service import MediaService
 from app.services.user_service import UserService as crud_user
 
 router = APIRouter()
@@ -26,7 +26,8 @@ async def upload_media(
     # client uploads, then client sends *this* request to register the completed upload.
     # For now, we assume `media_data.url` is the final URL.
     
-    db_media = crud_media.create_media(db, media=media_data, user_id=current_user.user_id)
+    crud_media = MediaService(db)
+    db_media = crud_media.create_media(media=media_data, user_id=current_user.user_id)
     return db_media
 
 @router.get("/me", response_model=List[MediaResponse])
@@ -36,7 +37,8 @@ def get_my_media(
     skip: int = 0, limit: int = 100
 ):
     """Retrieve all media uploaded by the current user."""
-    return crud_media.get_media_by_user(db, user_id=current_user.user_id, skip=skip, limit=limit)
+    crud_media = MediaService(db)
+    return crud_media.get_media_by_user(user_id=current_user.user_id, skip=skip, limit=limit)
 
 @router.delete("/{media_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_media(
@@ -45,12 +47,13 @@ def delete_media(
     db: Session = Depends(get_db)
 ):
     """Delete a specific media item by its ID."""
-    db_media = crud_media.get_media(db, media_id=media_id)
+    crud_media = MediaService(db)
+    db_media = crud_media.get_media(media_id=media_id)
     if not db_media:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Media not found")
     if db_media.user_id != current_user.user_id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete this media")
     
     # In a real app, you would also trigger deletion from cloud storage here
-    crud_media.delete_media(db, media_id=media_id)
+    crud_media.delete_media(media_id=media_id)
     return

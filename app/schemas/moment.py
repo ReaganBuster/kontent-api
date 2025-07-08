@@ -5,12 +5,8 @@ from datetime import datetime
 from app.schemas.user import UserPublic
 from app.schemas.media import MediaResponse
 
-
-# --- General Base Config for Pydantic v2 ---
-# This is crucial for handling ORM objects (SQLAlchemy instances)
 ORMConfig = ConfigDict(from_attributes=True)
 
-# --- 4. Moment Schemas (The "Posts") ---
 class MomentBase(BaseModel):
     text_content: Optional[str] = Field(None, max_length=1000)
     visibility: Optional[str] = Field("PUBLIC", pattern="^(PUBLIC|SUBSCRIBERS_ONLY|PRIVATE)$")
@@ -35,6 +31,7 @@ class MomentUpdate(BaseModel):
 class MomentInDBBase(MomentBase):
     moment_id: uuid.UUID
     user_id: uuid.UUID
+    visibility: str = "PUBLIC"
     created_at: datetime
     updated_at: datetime
     flirt_count: int

@@ -6,6 +6,7 @@ from app.services.user_service import UserService
 from app.schemas.user import UserCreate, UserResponse, UserUpdate
 from app.api.v1.endpoints.auth import get_current_user
 from app.models.user import User
+import uuid
 
 router = APIRouter()
 
@@ -36,7 +37,7 @@ def get_current_user_info(current_user: User = Depends(get_current_user)):
 
 @router.get("/{user_id}", response_model=UserResponse)
 def get_user(
-    user_id: int,
+    user_id: uuid.UUID,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -51,7 +52,7 @@ def get_user(
 
 @router.put("/{user_id}", response_model=UserResponse)
 def update_user(
-    user_id: int,
+    user_id: uuid.UUID,
     user_data: UserUpdate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)

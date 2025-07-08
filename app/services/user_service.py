@@ -11,7 +11,7 @@ class UserService:
         self.db = db
     
     def get_user(self, user_id: uuid.UUID) -> Optional[User]:
-        return self.db.query(User).filter(User.id == user_id).first()
+        return self.db.query(User).filter(User.user_id == user_id).first()
     
     def get_user_by_email(self, email: str) -> Optional[User]:
         return self.db.query(User).filter(User.email == email).first()

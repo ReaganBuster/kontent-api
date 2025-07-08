@@ -3,12 +3,8 @@ from typing import Optional, List, Dict
 import uuid
 from datetime import datetime
 
-# --- General Base Config for Pydantic v2 ---
-# This is crucial for handling ORM objects (SQLAlchemy instances)
 ORMConfig = ConfigDict(from_attributes=True)
 
-
-# --- 3. Media Schemas ---
 class MediaBase(BaseModel):
     url: str = Field(..., max_length=255)
     media_type: str = Field(..., pattern="^(image|video)$")

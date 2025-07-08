@@ -3,10 +3,7 @@ from typing import Optional, List, Dict
 import uuid
 from datetime import datetime
 
-# --- General Base Config for Pydantic v2 ---
-# This is crucial for handling ORM objects (SQLAlchemy instances)
 ORMConfig = ConfigDict(from_attributes=True)
-
 
 class FlirtCreate(BaseModel):
     moment_id: uuid.UUID
